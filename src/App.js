@@ -1,7 +1,28 @@
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import React from 'react';
+
 
 function App() {
+
+  const [ data, setData ] = React.useState([]);
+
+  const getApi = async()=> {
+    await axios.get('https://restcountries.com/v3.1/all')
+    .then(res => {
+      setData(res.data)
+       console.log(res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  };
+
+  React.useEffect(()=>{
+    getApi()
+  },[])
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -9,14 +30,13 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <ul> 
+          {data.map((item,index)=>(
+            <li key={index}>國家: { item.name.common }</li>
+          ))}
+        </ul>
+         
+       
       </header>
     </div>
   );
